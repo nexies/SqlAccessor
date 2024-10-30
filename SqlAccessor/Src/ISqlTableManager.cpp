@@ -93,16 +93,16 @@ QString ISqlTableManager::insertQuery(ISqlTableItem::ptr item)
 {
     return QString("INSERT INTO %1.%2 (%3, _uuid) VALUES (%4, %5);").
             arg(tableScheme(), tableName(),
-                item->sqlFieldNames().join(", "),
-                item->sqlValues().join(", "),
+                item->sqlFields().join(", "),
+                item->allSqlNotations().join(", "),
                 QString("'%1'").arg(item->uuid()));
 
 }
 
 QString ISqlTableManager::updateQuery(ISqlTableItem::ptr item)
 {
-    auto fieldNames = item->sqlFieldNames();
-    auto fieldValues = item->sqlValues();
+    auto fieldNames = item->sqlFields();
+    auto fieldValues = item->allSqlNotations();
     QStringList fieldNameValue;
     for(int i = 0; i < fieldNames.size(); i++)
     {
@@ -125,7 +125,7 @@ QString ISqlTableManager::deleteQuery(ISqlTableItem::ptr item)
 bool ISqlTableManager::autoParseQuery(ISqlTableItem::ptr item, const QJsonObject & record)
 {
     bool ok = true;
-    QStringList fields = item->sqlFieldNames();
+    QStringList fields = item->sqlFields();
     if(!record.contains("_uuid"))
     {
         qCritical () << Title << "can't auto parse the query - '_uuid' does not exist!";
@@ -140,7 +140,7 @@ bool ISqlTableManager::autoParseQuery(ISqlTableItem::ptr item, const QJsonObject
             qWarning().noquote() << Title << "failed to auto parse query - record doesn't contain field" << field;
             ok = false;
         }
-        item->_private->setProperty(field.toStdString().c_str(), record.value(field));
+        item->setProperty(field.toStdString().c_str(), record.value(field));
     }
     return ok;
 }

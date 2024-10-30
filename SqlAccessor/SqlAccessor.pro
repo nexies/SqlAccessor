@@ -1,9 +1,12 @@
 QT += core sql
 
-TEMPLATE = lib
 TARGET = SqlAccessor
+TEMPLATE = lib
+DESTDIR = ../lib
+MOC_DIR = moc
+OBJECTS_DIR = obj
 
-include(../../common.pri)
+
 INCLUDEPATH += $$PWD/Include
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -32,5 +35,6 @@ HEADERS += \
     Include/SqlDataMapper.h \
     Include/SqlDatabaseConnector.h \
     Include/SqlNotification.h \
-    Include/SqlValue.h
+    Include/SqlValue.h \
+    Include/sql_acccessor_defs.h
 
